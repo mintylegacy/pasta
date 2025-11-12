@@ -1,4 +1,4 @@
-if not game:IsLoaded() then 
+if not game:IsLoaded() then
     game.Loaded:Wait()
 end
 
@@ -20,7 +20,7 @@ if bypass_adonis then
             if typeof(v) == "table" then
                 local a = rawget(v, "Detected")
                 local b = rawget(v, "Kill")
-            
+
                 if typeof(a) == "function" and not x then
                     x = a
                     local o; o = hookfunction(x, function(c, f, n)
@@ -28,7 +28,7 @@ if bypass_adonis then
                             if d then
                             end
                         end
-                        
+
                         return true
                     end)
                     table.insert(h, x)
@@ -55,7 +55,7 @@ if bypass_adonis then
 
                 return coroutine.yield(coroutine.running())
             end
-            
+
             return o(...)
         end))
 
@@ -200,7 +200,7 @@ local ExpectedArguments = {
         ArgCountRequired = 2,
         Args = { "Ray", "table", "boolean?", "boolean?" }
     },
-    FindPartOnRayWithWhitelist = { 
+    FindPartOnRayWithWhitelist = {
         ArgCountRequired = 2,
         Args = { "Ray", "table", "boolean?" }
     }
@@ -578,13 +578,10 @@ end)
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/FakeAngles/PasteWareUI-Lib/refs/heads/main/PasteWareUIlib.lua"))()
 local ThemeManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/FakeAngles/PasteWareUI-Lib/refs/heads/main/manage2.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/FakeAngles/PasteWareUI-Lib/refs/heads/main/manager.lua"))()
-
-Library.KeybindFrame.Visible = true;
-
 local Window = Library:CreateWindow({
     Title = 'PasteWare  |  github.com/FakeAngles',
     Center = true,
-    AutoShow = true,  
+    AutoShow = true,
     TabPadding = 8,
     MenuFadeTime = 0.2
 })
@@ -600,6 +597,31 @@ local settingsTab = Window:AddTab("Settings")
 local MenuGroup = settingsTab:AddLeftGroupbox("Menu")
 MenuGroup:AddButton("Unload", function() Library:Unload() end)
 MenuGroup:AddLabel("Menu bind"):AddKeyPicker("MenuKeybind", { Default = "None", NoUI = true, Text = "Menu keybind" })
+MenuGroup:AddToggle("ShowKeybinds", {
+    Text = "Show Keybinds",
+    Default = Library.KeybindFrame and Library.KeybindFrame.Visible or false,
+    Callback = function(value)
+        Library:SetKeybindListVisible(value)
+    end,
+})
+
+MenuGroup:AddToggle("SimulateMobileUI", {
+    Text = "Simulate Mobile Mode",
+    Tooltip = "Enable the mobile UI while on PC to test touch controls.",
+    Default = Library.MobileSimulation,
+    Callback = function(value)
+        Library:SetMobileSimulation(value)
+    end,
+})
+
+if Library.KeybindFrame and Toggles.ShowKeybinds then
+    Library:SetKeybindListVisible(Toggles.ShowKeybinds.Value)
+end
+
+if Options.SimulateMobileUI then
+    Library:SetMobileSimulation(Options.SimulateMobileUI.Value)
+end
+
 Library.ToggleKeybind = Options.MenuKeybind
 ThemeManager:SetLibrary(Library)
 SaveManager:SetLibrary(Library)
@@ -610,7 +632,7 @@ local lastAimLockKeyState = false
 local lastAimLockKeyMode = ScriptState.aimLockKeyMode
 
 aimbox:AddToggle("aimLockKeyToggle", {
-    Text = "aimlock keybind",
+    Text = "aimlock",
     Default = false,
     Tooltip = "Toggle AimLock on or off.",
     Callback = function(value)
@@ -623,7 +645,7 @@ aimbox:AddToggle("aimLockKeyToggle", {
     Default = "None",
     SyncToggleState = true,
     Mode = ScriptState.aimLockKeyMode,
-    Text = "AimLock Key",
+    Text = "AimLock",
     Tooltip = "Keybind for AimLock",
     Callback = function()
         if Options.aimLock_KeyPicker.Mode == "Toggle" then
@@ -699,7 +721,7 @@ aimbox:AddSlider("Prediction", {
 })
 
 aimbox:AddToggle("aimLockVisibleCheck", {
-    Text = "AimLock Visible Check",
+    Text = "Visible Check",
     Default = ScriptState.aimLockVisibleCheck,
     Tooltip = "Skip targets blocked by objects.",
     Callback = function(value)
@@ -708,7 +730,7 @@ aimbox:AddToggle("aimLockVisibleCheck", {
 })
 
 aimbox:AddToggle("aimLockAliveCheck", {
-    Text = "AimLock Alive Check",
+    Text = "Alive Check",
     Default = ScriptState.aimLockAliveCheck,
     Tooltip = "Ignore eliminated targets.",
     Callback = function(value)
@@ -717,7 +739,7 @@ aimbox:AddToggle("aimLockAliveCheck", {
 })
 
 aimbox:AddToggle("aimLockTeamCheck", {
-    Text = "AimLock Team Check",
+    Text = "Team Check",
     Default = ScriptState.aimLockTeamCheck,
     Tooltip = "Avoid locking teammates.",
     Callback = function(value)
@@ -739,13 +761,13 @@ aimbox:AddDropdown("BodyParts", {
     end,
 })
 
-getgenv().ScriptState.Desync = false 
+getgenv().ScriptState.Desync = false
 
 RunService.Heartbeat:Connect(function()
     if getgenv().ScriptState.Desync then
         local player = game.Players.LocalPlayer
         local character = player.Character
-        if not character then return end 
+        if not character then return end
         local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
         if not humanoidRootPart then return end
         local originalVelocity = humanoidRootPart.Velocity
@@ -768,7 +790,7 @@ end)
 
 
 velbox:AddToggle("desyncEnabled", {
-    Text = "Desync keybind",
+    Text = "Desync",
     Default = false,
     Tooltip = "Enable or disable reverse resolve desync.",
     Callback = function(value)
@@ -857,7 +879,7 @@ aimbox:AddSlider("ResolverIntensity", {
 
 aimbox:AddDropdown("ResolverMethods", {
     Values = {"Recalculate", "Randomize", "Invert"},
-    Default = "Recalculate", 
+    Default = "Recalculate",
     Multi = false,
     Text = "Resolver Method",
     Tooltip = "Select the method used by the Anti Lock Resolver.",
@@ -867,11 +889,11 @@ aimbox:AddDropdown("ResolverMethods", {
 })
 
 
-local MainBOX = GeneralTab:AddLeftTabbox("silent aim")
-local Main = MainBOX:AddTab("silent aim")
+local MainBOX = GeneralTab:AddLeftTabbox("Silent Aim")
+local Main = MainBOX:AddTab("Silent Aim")
 
 local silentAimToggle = Main:AddToggle("silentAimEnabled", {
-    Text = "Enabled",
+    Text = "Silent Aim",
     Default = SilentAimSettings.Enabled,
     Callback = function(value)
         SilentAimSettings.Enabled = value
@@ -937,9 +959,9 @@ Main:AddToggle("CheckForFireFunc", {
 end)
 
 Main:AddDropdown("TargetPart", {
-    AllowNull = true, 
-    Text = "Target Part", 
-    Default = SilentAimSettings.TargetPart, 
+    AllowNull = true,
+    Text = "Target Part",
+    Default = SilentAimSettings.TargetPart,
     Values = {"Head", "HumanoidRootPart", "Random"}
 }):OnChanged(function()
     SilentAimSettings.TargetPart = Options.TargetPart.Value
@@ -958,8 +980,8 @@ Main:AddDropdown("Method", {
         "FindPartOnRayWithWhitelist",
         "CounterBlox"
     }
-}):OnChanged(function() 
-    SilentAimSettings.SilentAimMethod = Options.Method.Value 
+}):OnChanged(function()
+    SilentAimSettings.SilentAimMethod = Options.Method.Value
 end)
 
 if not SilentAimSettings.BlockedMethods then
@@ -1123,11 +1145,11 @@ task.spawn(function()
                         end
                     end
                 end
-            else 
+            else
                 removeOldHighlight()
             end
         end
-        if Toggles.Visible.Value then 
+        if Toggles.Visible.Value then
             fov_circle.Visible = Toggles.Visible.Value
             fov_circle.Color = Options.Color.Value
             fov_circle.Position = getFovOrigin()
@@ -1527,7 +1549,7 @@ Visuals:NewSky({
 })
 
 Visuals:NewSky({
-    Name = "Red Night", 
+    Name = "Red Night",
     SkyboxBk = "http://www.roblox.com/Asset/?ID=401664839";
     SkyboxDn = "http://www.roblox.com/Asset/?ID=401664862";
     SkyboxFt = "http://www.roblox.com/Asset/?ID=401664960";
@@ -1537,7 +1559,7 @@ Visuals:NewSky({
 })
 
 Visuals:NewSky({
-    Name = "Deep Space", 
+    Name = "Deep Space",
     SkyboxBk = "http://www.roblox.com/asset/?id=149397692";
     SkyboxDn = "http://www.roblox.com/asset/?id=149397686";
     SkyboxFt = "http://www.roblox.com/asset/?id=149397697";
@@ -1547,7 +1569,7 @@ Visuals:NewSky({
 })
 
 Visuals:NewSky({
-    Name = "Pink Skies", 
+    Name = "Pink Skies",
     SkyboxBk = "http://www.roblox.com/asset/?id=151165214";
     SkyboxDn = "http://www.roblox.com/asset/?id=151165197";
     SkyboxFt = "http://www.roblox.com/asset/?id=151165224";
@@ -1557,7 +1579,7 @@ Visuals:NewSky({
 })
 
 Visuals:NewSky({
-    Name = "Purple Sunset", 
+    Name = "Purple Sunset",
     SkyboxBk = "rbxassetid://264908339";
     SkyboxDn = "rbxassetid://264907909";
     SkyboxFt = "rbxassetid://264909420";
@@ -1567,7 +1589,7 @@ Visuals:NewSky({
 })
 
 Visuals:NewSky({
-    Name = "Blue Night", 
+    Name = "Blue Night",
     SkyboxBk = "http://www.roblox.com/Asset/?ID=12064107";
     SkyboxDn = "http://www.roblox.com/Asset/?ID=12064152";
     SkyboxFt = "http://www.roblox.com/Asset/?ID=12064121";
@@ -1577,7 +1599,7 @@ Visuals:NewSky({
 })
 
 Visuals:NewSky({
-    Name = "Blossom Daylight", 
+    Name = "Blossom Daylight",
     SkyboxBk = "http://www.roblox.com/asset/?id=271042516";
     SkyboxDn = "http://www.roblox.com/asset/?id=271077243";
     SkyboxFt = "http://www.roblox.com/asset/?id=271042556";
@@ -1587,7 +1609,7 @@ Visuals:NewSky({
 })
 
 Visuals:NewSky({
-    Name = "Blue Nebula", 
+    Name = "Blue Nebula",
     SkyboxBk = "http://www.roblox.com/asset?id=135207744";
     SkyboxDn = "http://www.roblox.com/asset?id=135207662";
     SkyboxFt = "http://www.roblox.com/asset?id=135207770";
@@ -1597,7 +1619,7 @@ Visuals:NewSky({
 })
 
 Visuals:NewSky({
-    Name = "Blue Planet", 
+    Name = "Blue Planet",
     SkyboxBk = "rbxassetid://218955819";
     SkyboxDn = "rbxassetid://218953419";
     SkyboxFt = "rbxassetid://218954524";
@@ -1607,7 +1629,7 @@ Visuals:NewSky({
 })
 
 Visuals:NewSky({
-    Name = "Deep Space", 
+    Name = "Deep Space",
     SkyboxBk = "http://www.roblox.com/asset/?id=159248188";
     SkyboxDn = "http://www.roblox.com/asset/?id=159248183";
     SkyboxFt = "http://www.roblox.com/asset/?id=159248187";
@@ -2458,7 +2480,7 @@ local function stopTargetStrafe()
     ScriptState.strafeEnabled, ScriptState.strafeTargetPart = false, nil
 end
 targetStrafe:AddToggle("strafeToggle", {
-    Text = "Enable Target Strafe",
+    Text = "Target Strafe",
     Default = false,
     Tooltip = "Enable or disable Target Strafe.",
     Callback = function(value)
@@ -2473,7 +2495,7 @@ targetStrafe:AddToggle("strafeToggle", {
     Default = "None",
     SyncToggleState = true,
     Mode = "Toggle",
-    Text = "Target Strafe Toggle Key",
+    Text = "Target Strafe",
     Tooltip = "Key to toggle Target Strafe",
     Callback = function(value)
         ScriptState.strafeEnabled = value

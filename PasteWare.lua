@@ -11,11 +11,8 @@ if bypass_adonis then
         local g = getinfo or debug.getinfo
         local d = false
         local h = {}
-
         local x, y
-
         setthreadidentity(2)
-
         for i, v in getgc(true) do
             if typeof(v) == "table" then
                 local a = rawget(v, "Detected")
@@ -28,7 +25,6 @@ if bypass_adonis then
                             if d then
                             end
                         end
-
                         return true
                     end)
                     table.insert(h, x)
@@ -44,21 +40,13 @@ if bypass_adonis then
                 end
             end
         end
-
         local o; o = hookfunction(getrenv().debug.info, newcclosure(function(...)
             local a, f = ...
-
             if x and a == x then
-                if d then
-                    warn(`zins | adonis bypassed`)
-                end
-
                 return coroutine.yield(coroutine.running())
             end
-
             return o(...)
         end))
-
         setthreadidentity(7)
     end)
 end
@@ -2666,3 +2654,4 @@ while true do
 end
 
 ThemeManager:LoadDefaultTheme()
+

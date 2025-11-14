@@ -563,7 +563,7 @@ end)
 
 
 
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/FakeAngles/PasteWareUI-Lib/refs/heads/main/PasteWareUIlib.lua"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/FakeAngles/PasteWare-v2/refs/heads/main/legacyMobile_Lib.lua"))()
 local ThemeManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/FakeAngles/PasteWareUI-Lib/refs/heads/main/manage2.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/FakeAngles/PasteWareUI-Lib/refs/heads/main/manager.lua"))()
 local Window = Library:CreateWindow({
@@ -2706,3 +2706,4 @@ while true do
 end
 
 ThemeManager:LoadDefaultTheme()
+

@@ -1,15 +1,15 @@
-local Players = cloneref(game:GetService("Players"))
-local RunService = cloneref(game:GetService("RunService"))
-local InputService = cloneref(game:GetService("UserInputService"))
-local CoreGui = cloneref(game:GetService("CoreGui"))
-local TextService = cloneref(game:GetService("TextService"))
-local Teams = cloneref(game:GetService('Teams'))
-local TweenService = game:GetService('TweenService');
+local InputService = cloneref(game:GetService('UserInputService'));
+local TextService = cloneref(game:GetService('TextService'));
+local CoreGui = gethui();
+local Teams = cloneref(game:GetService('Teams'));
+local Players = cloneref(game:GetService('Players'));
+local RunService = cloneref(game:GetService('RunService'));
+local TweenService = cloneref(game:GetService('TweenService'));
 local RenderStepped = RunService.RenderStepped;
-local LocalPlayer = Players.LocalPlayer;
-local Mouse = LocalPlayer:GetMouse();
+local LocalPlayer = cloneref(Players.LocalPlayer);
+local Mouse = cloneref(LocalPlayer:GetMouse());
 
-local ProtectGui = protectgui or (syn and syn.protect_gui) or (function() end);
+local ProtectGui = protectgui or (crypt and crypt.protect_gui) or (function() end);
 -- hi
 local ScreenGui = Instance.new('ScreenGui');
 ProtectGui(ScreenGui);
@@ -3593,6 +3593,7 @@ Players.PlayerRemoving:Connect(OnPlayerChange);
 getgenv().Library = Library
 
 return Library
+
 
 
 
